@@ -1,0 +1,19 @@
+{% extends "si/base_site.html" %}
+{% load i18n %}
+{% block title %}Registration{% endblock %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="../">{% trans 'Home' %}</a>{% if title %} &rsaquo; {{ title }}{% endif %}</div>{% endblock %}
+{% block content %}
+<div id="content-main">
+<hr />
+<form method="POST" action=".">
+{% csrf_token %}
+<table>  
+{{ form }}
+</table>
+<input type="submit" value="register" />
+</form>
+<script type="text/javascript">
+document.getElementById('id_first_name').focus();
+</script>
+</div>
+{% endblock %}
