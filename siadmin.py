@@ -7,6 +7,7 @@ from django.contrib.auth.admin import GroupAdmin,UserAdmin
 class SiAdminSite(AdminSite):
     login_template = 'si/login.html'
     index_template = 'si/index.html'
+    logout_template='si/logged_out.html'
 
 class StudentAdmin(ModelAdmin):
     search_fields= ['first_name','last_name','course__department','course__code','course__section']
