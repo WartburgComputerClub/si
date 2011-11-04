@@ -41,7 +41,10 @@ class Session(models.Model):
 class Session(models.Model):
     date = models.DateField()
     course = models.ForeignKey(Course)
-    student = models.ManyToManyField(Student)
+    student = models.ManyToManyField(Student,blank=True)
     user = models.ForeignKey(User)
     def __unicode__(self):
         return str(self.date)
+    class Meta:
+        unique_together = ('date','course')
+
