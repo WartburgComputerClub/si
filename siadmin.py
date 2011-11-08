@@ -68,11 +68,21 @@ class CourseAdmin(ModelAdmin):
 
 
 class SessionAdmin(ModelAdmin):
-    list_display = ('date','course')
+    list_display = ('date','signin_link','course')
     exclude = ["user"]
     filter_horizontal = ['student']
     form = SessionForm
-
+    
+    def signin_link(self,obj):
+        return u'<a href="signin/%s/">%s</a>' % (obj.id, str(obj) + ' (' + str(obj.course) + ')')
+    
+    signin_link.allow_tags = True
+    signin_link.short_description = "Signin Page"
+    '''
+    def __init__(self,*args,**kwargs):
+        super(SessionAdmin,self).__init__(*args,**kwargs)
+        #self.list_display_links = (None,)
+        '''
     def formfield_for_manytomany(self,db_field,request,**kwargs):
         if db_field.name == 'student' and not request.user.is_superuser:
             kwargs['queryset'] = Student.objects.filter(user=request.user)
