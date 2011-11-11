@@ -3,6 +3,8 @@ from si.forms import SessionForm
 from si.models import Student,Course,Session
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.admin import GroupAdmin,UserAdmin
+from django.core.urlresolvers import reverse
+
 
 class SiAdminSite(AdminSite):
     login_template = 'si/login.html'
@@ -73,8 +75,8 @@ class SessionAdmin(ModelAdmin):
     filter_horizontal = ['student']
     form = SessionForm
     
-    def signin_link(self,obj):
-        return u'<a href="signin/%s/">%s</a>' % (obj.id, str(obj) + ' (' + str(obj.course) + ')')
+    def signin_link(self,obj):        
+        return u'<a href="%ssignin/%s/">%s</a>' % (str(reverse('si.views.index')),obj.id, str(obj) + ' (' + str(obj.course) + ')')
     
     signin_link.allow_tags = True
     signin_link.short_description = "Signin Page"

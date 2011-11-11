@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response,get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.template import RequestContext
-from si.forms import UserAddForm
+from si.forms import UserAddForm,SigninForm
 from django.core.urlresolvers import reverse
 
 def register_view(request):
@@ -33,3 +33,9 @@ def register(request):
         'title': 'Registration'
     },context_instance=RequestContext(request))
 
+def signin(request,session):
+    form = SigninForm()
+    return render_to_response("si/signin.html",{
+            'form': form
+            },context_instance=RequestContext(request))
+#return HttpResponse("Hello World!" + str(session))

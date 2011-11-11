@@ -3,6 +3,7 @@ from si.siadmin import site
 
 urlpatterns = patterns('si.views',
     (r'^$','index'),                       
+    (r'^signin/(?P<session>\d+)/$','signin'),
     (r'^admin/',include(site.urls)),
     (r'^register/$','register'),
 )
