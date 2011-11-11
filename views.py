@@ -1,3 +1,4 @@
+
 # Create your views here.
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
@@ -34,8 +35,11 @@ def register(request):
     },context_instance=RequestContext(request))
 
 def signin(request,session):
+    if request.user.is_authenticated():
+        logout(request)
     form = SigninForm()
     return render_to_response("si/signin.html",{
-            'form': form
+            'form': form,
+            'title': 'Signin'
             },context_instance=RequestContext(request))
 #return HttpResponse("Hello World!" + str(session))
