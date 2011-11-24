@@ -59,7 +59,11 @@ class SigninForm(forms.Form):
         sess = Session.objects.get(pk=session)
         
         try:
-            self.student = Student.objects.get(course=sess.course,first_name=first_name,last_name=last_name)
+            stud = Student.objects.get(course=sess.course,first_name=first_name,last_name=last_name)
+            if stud in sess.student.all():
+                raise forms.ValidationError("You are already signed in!")
+            else:
+                self.student = stud
         except Student.DoesNotExist:
             raise forms.ValidationError("You are not a member of this course!")
         

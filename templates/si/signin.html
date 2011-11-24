@@ -1,7 +1,19 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 {% load static %}
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="/static/css/login.css" />{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="/static/css/login.css" />
+<style>
+.signin_success{
+font-size: 12px !important;
+display: block;
+padding: 4px 5px 4px 25px;
+margin: 0 0 3px 0;
+border: 1px solid green;
+color: green;
+background: #FFC url(/static/admin/img/admin/icon_success.gif) 5px .3em no-repeat;
+}
+</style>
+{% endblock %}
 
 {% block title %}{{ title }} | {% trans 'Signin Page' %}{% endblock %}
 
@@ -49,6 +61,12 @@
   <div class="submit-row">
     <label>&nbsp;</label><input type="submit" value="{% trans 'Sign in' %}" />
   </div>
+  {% if form.win %}
+  <br /><br />
+  <p class="signin_success">Sign In Successful!</p>
+  {% endif %}
+  <br />
+  <a href="../../leave/">Leave</a>
 </form>
 
 <script type="text/javascript">

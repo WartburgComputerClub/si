@@ -6,4 +6,5 @@ urlpatterns = patterns('si.views',
     (r'^signin/(?P<session>\d+)/$','signin'),
     (r'^admin/',include(site.urls)),
     (r'^register/$','register'),
+    (r'^leave/$','leave'),                       
 )

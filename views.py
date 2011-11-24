@@ -35,6 +35,10 @@ def register(request):
         'title': 'Registration'
     },context_instance=RequestContext(request))
 
+def leave(request):
+    request.session.flush()
+    return HttpResponseRedirect('../admin/')
+
 def signin(request,session):
     flag = False
     if request.method == 'POST':
@@ -43,6 +47,8 @@ def signin(request,session):
         form = SigninForm(data)
         if form.is_valid():
             form.signin()
+            form = SigninForm()
+            form.win= True
     else:
         form = SigninForm()
     sess = Session.objects.get(pk=session)
@@ -56,8 +62,7 @@ def signin(request,session):
     if request.session['signin_id'] == sess.id:
         return render_to_response("si/signin.html",{
             'form': form,
-            'title': ('Signin ' + str(sess.date))
+            'title': ('Sign In ' + str(sess.date)),
             },context_instance=RequestContext(request))
     else:
-        return HttpResponseRedirect(reverse('si.views.login_view'))
-#return HttpResponse("Hello World!" + str(session))
+        return HttpResponseRedirect('../../admin')
