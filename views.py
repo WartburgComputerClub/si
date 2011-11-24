@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.template import RequestContext
 from si.forms import UserAddForm,SigninForm
+from si.models import Session
 from django.core.urlresolvers import reverse
 
 def register_view(request):
@@ -35,11 +36,27 @@ def register(request):
     },context_instance=RequestContext(request))
 
 def signin(request,session):
-    if request.user.is_authenticated():
-        logout(request)
+    flag = False
+    sess = Session.objects.get(pk=session)
     form = SigninForm()
-    return render_to_response("si/signin.html",{
+
+    if request.user.is_authenticated():
+        if request.user == sess.user:
+            flag = True
+            #response.set_cookie('valid',True,max_age=120)
+        logout(request)
+
+    response = render_to_response("si/signin.html",{
             'form': form,
-            'title': 'Signin'
+            'title': ('Signin ' + str(sess.date))
             },context_instance=RequestContext(request))
+    print flag
+    if (flag):
+        response.set_cookie('valid',True,max_age=120)
+        return response
+    if request.COOKIES.get('valid'):
+        return response
+    else:
+        return HttpResponse("COOKIE TIMED OUT!")
+    print request.COOKIES.get('valid')
 #return HttpResponse("Hello World!" + str(session))

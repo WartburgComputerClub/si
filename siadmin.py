@@ -14,6 +14,7 @@ class SiAdminSite(AdminSite):
 class StudentAdmin(ModelAdmin):
     search_fields= ['first_name','last_name','course__department','course__code','course__section']
     list_display = ('first_name','last_name','course')
+    #list_filter = ('course__department','course__code','course__section','course__id')
     '''list_display = ('first_name','last_name','course')
     list_filter = ('course__department','course__code','course__section','course__id')'''
     exclude = ["user"]
