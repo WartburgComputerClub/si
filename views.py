@@ -44,21 +44,18 @@ def signin(request,session):
         form = SigninForm()
     sess = Session.objects.get(pk=session)
 
-
     if request.user.is_authenticated():
         if request.user == sess.user:
             flag = True
         logout(request)
+        if (flag):
+            request.session['signin_id'] = sess.id
 
-    response = render_to_response("si/signin.html",{
+    if request.session['signin_id'] == sess.id:
+        return render_to_response("si/signin.html",{
             'form': form,
             'title': ('Signin ' + str(sess.date))
             },context_instance=RequestContext(request))
-    if (flag):
-        response.set_cookie('signin_id',True,max_age=120)
-        return response
-    if request.COOKIES.get('signin_id'):
-        return response
     else:
-        return HttpResponse("COOKIE TIMED OUT!")
+        return HttpResponseRedirect(reverse('si.views.login_view'))
 #return HttpResponse("Hello World!" + str(session))
