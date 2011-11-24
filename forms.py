@@ -1,7 +1,9 @@
+from django.db import models
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User,Group
-from si.models import Session
+from si.models import Session,Student
 from django import forms
+import string
 
 class SessionForm(forms.ModelForm):
     class Meta:
@@ -39,4 +41,28 @@ class UserAddForm(UserCreationForm):
 class SigninForm(forms.Form):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
+    session = forms.IntegerField()
 
+    def clean(self):
+
+        cleaned_data = self.cleaned_data
+        session = cleaned_data.get('session')
+        first_name = cleaned_data.get('first_name')
+        last_name = cleaned_data.get('last_name')
+
+        if first_name == None or last_name == None:
+            return cleaned_data
+
+        first_name = string.capwords(first_name)
+        last_name = string.capwords(last_name)
+        
+        sess = Session.objects.get(pk=session)
+        
+        try:
+            stud = Student.objects.get(course=sess.course,first_name=first_name,last_name=last_name)
+            print stud
+        except Student.DoesNotExist:
+            raise forms.ValidationError("You are not a member of this course!")
+        
+        return cleaned_data
+        

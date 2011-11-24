@@ -39,11 +39,13 @@ def signin(request,session):
     flag = False
     if request.method == 'POST':
         data = request.POST.copy()
+        data[u'session']=session
         form = SigninForm(data)
+        if form.is_valid():
+            print 'here'
     else:
         form = SigninForm()
     sess = Session.objects.get(pk=session)
-
     if request.user.is_authenticated():
         if request.user == sess.user:
             flag = True

@@ -24,18 +24,16 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
+{% if form.non_field_errors %}
+<p class="errornote">
+    {{ form.non_field_errors|first }}
+</p>
+{% endif %}
+
 {% if form.errors and not form.non_field_errors and not form.this_is_the_login_form.errors %}
 <p class="errornote">
 {% blocktrans count form.errors.items|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
 </p>
-{% endif %}
-
-{% if form.non_field_errors or form.this_is_the_login_form.errors %}
-{% for error in form.non_field_errors|add:form.this_is_the_login_form.errors %}
-<p class="errornote">
-    {{ error }}
-</p>
-{% endfor %}
 {% endif %}
 
 <div id="content-main">
