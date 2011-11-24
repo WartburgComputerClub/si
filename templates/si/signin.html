@@ -41,11 +41,11 @@
 <div id="content-main">
 <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
   <div class="form-row">
-    {% if not form.this_is_the_login_form.errors %}{{ form.username.errors }}{% endif %}
+    {% if not form.this_is_the_login_form.errors %}{{ form.first_name.errors }}{% endif %}
     <label for="id_first_name" class="required">{% trans 'First Name:' %}</label> {{ form.first_name }}
   </div>
   <div class="form-row">
-    {% if not form.this_is_the_login_form.errors %}{{ form.password.errors }}{% endif %}
+    {% if not form.this_is_the_login_form.errors %}{{ form.last_name.errors }}{% endif %}
     <label for="id_last_name" class="required">{% trans 'Last Name:' %}</label> {{ form.last_name }}
   </div>
   <div class="submit-row">

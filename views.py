@@ -37,26 +37,28 @@ def register(request):
 
 def signin(request,session):
     flag = False
+    if request.method == 'POST':
+        data = request.POST.copy()
+        form = SigninForm(data)
+    else:
+        form = SigninForm()
     sess = Session.objects.get(pk=session)
-    form = SigninForm()
+
 
     if request.user.is_authenticated():
         if request.user == sess.user:
             flag = True
-            #response.set_cookie('valid',True,max_age=120)
         logout(request)
 
     response = render_to_response("si/signin.html",{
             'form': form,
             'title': ('Signin ' + str(sess.date))
             },context_instance=RequestContext(request))
-    print flag
     if (flag):
-        response.set_cookie('valid',True,max_age=120)
+        response.set_cookie('signin_id',True,max_age=120)
         return response
-    if request.COOKIES.get('valid'):
+    if request.COOKIES.get('signin_id'):
         return response
     else:
         return HttpResponse("COOKIE TIMED OUT!")
-    print request.COOKIES.get('valid')
 #return HttpResponse("Hello World!" + str(session))
