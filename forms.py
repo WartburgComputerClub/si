@@ -42,7 +42,7 @@ class SigninForm(forms.Form):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
     session = forms.IntegerField()
-
+    student = None
     def clean(self):
 
         cleaned_data = self.cleaned_data
@@ -59,10 +59,14 @@ class SigninForm(forms.Form):
         sess = Session.objects.get(pk=session)
         
         try:
-            stud = Student.objects.get(course=sess.course,first_name=first_name,last_name=last_name)
-            print stud
+            self.student = Student.objects.get(course=sess.course,first_name=first_name,last_name=last_name)
         except Student.DoesNotExist:
             raise forms.ValidationError("You are not a member of this course!")
         
         return cleaned_data
         
+    def signin(self):
+        session = self.cleaned_data['session']
+        sess = Session.objects.get(pk=session)
+        sess.student.add(self.student)
+        sess.save()

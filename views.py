@@ -42,7 +42,7 @@ def signin(request,session):
         data[u'session']=session
         form = SigninForm(data)
         if form.is_valid():
-            print 'here'
+            form.signin()
     else:
         form = SigninForm()
     sess = Session.objects.get(pk=session)
