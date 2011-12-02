@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class Course(models.Model):
-    prof = models.CharField(max_length=100)
+    professor = models.CharField(max_length=100)
     department = models.CharField(max_length=2)
     code = models.IntegerField()
     section = models.CharField(max_length=2)

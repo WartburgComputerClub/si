@@ -1,7 +1,7 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 {% load static %}
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="/static/css/login.css" />
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/login.css" />
 <style>
 .signin_success{
 font-size: 12px !important;
@@ -10,7 +10,7 @@ padding: 4px 5px 4px 25px;
 margin: 0 0 3px 0;
 border: 1px solid green;
 color: green;
-background: #FFC url(/static/admin/img/admin/icon_success.gif) 5px .3em no-repeat;
+background: #FFC url({% admin_media_prefix %}img/admin/icon_success.gif) 5px .3em no-repeat;
 }
 </style>
 {% endblock %}
