@@ -5,6 +5,9 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth.admin import GroupAdmin,UserAdmin
 from django.core.urlresolvers import reverse
 
+def generate_excel(modeladmin,request,queryset):
+    for course in queryset:
+        print 'here'
 
 class SiAdminSite(AdminSite):
     login_template = 'si/login.html'
@@ -12,7 +15,8 @@ class SiAdminSite(AdminSite):
     logout_template='si/logged_out.html'
 
 class StudentAdmin(ModelAdmin):
-    search_fields= ['first_name','last_name','course__department','course__code','course__section']
+    search_fields= ['first_name','last_name','course__department','course__code'
+,'course__section']
     list_display = ('first_name','last_name','course')
     #list_filter = ('course__department','course__code','course__section','course__id')
     '''list_display = ('first_name','last_name','course')
@@ -49,6 +53,7 @@ class StudentAdmin(ModelAdmin):
 class CourseAdmin(ModelAdmin):
     exclude = ["user"]
     search_fields= ['course__department','course__code','course__section']
+    actions = [generate_excel]
     def queryset(self,request):
         qs = super(CourseAdmin,self).queryset(request)
         if request.user.is_superuser:
