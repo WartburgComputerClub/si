@@ -4,10 +4,53 @@ from si.models import Student,Course,Session
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.admin import GroupAdmin,UserAdmin
 from django.core.urlresolvers import reverse
+import urllib2
+import urllib
+from django.http import HttpResponse
+from settings import STATIC_URL
 
 def generate_excel(modeladmin,request,queryset):
+    php_script = STATIC_URL + 'gen_excel.php'
+    post_data = []
+    count = 0;
     for course in queryset:
-        print 'here'
+        csv = ''
+        csv += str(course.year) + ','
+        csv += str(course.term) + ','
+        csv += str(course.department) + ','
+        csv += str(course.code) + ','
+        csv += str(course.section) + ','
+        csv += str(course.professor) + ','
+        first_test = str(course.exam)
+        csv += first_test + ','
+        midterm = str(course.midterm)
+        total_sessions = str(len(Session.objects.filter(course=course)))
+        csv += total_sessions + ','
+        csv += str(course.user.first_name) + ' ' + str(course.user.last_name) + ','
+        studs = Student.objects.filter(course=course)
+        for stud in studs:
+            csv += str(stud.last_name) + ','
+            csv += str(stud.first_name) + ','
+            csv += str(stud.interest) + ','
+            csv += str(stud.taken) + ','
+            csv += str(stud.future) + ','
+            csv += str(len(Session.objects.filter(
+                    student=stud,course=course,date__lte=first_test))) + ','
+            csv += str(len(Session.objects.filter(
+                        student=stud,course=course,date__lte=midterm))) + ','
+
+            csv += str(len(Session.objects.filter(
+                        student=stud,course=course,date__gt=midterm))) + ','
+            
+        csv = csv[:-1]
+        post_data.append(('csv' + str(count),csv))
+        count += 1
+
+    result = urllib2.urlopen(php_script,urllib.urlencode(post_data))
+    content = result.read()
+    response = HttpResponse(content,content_type='Content-Type: application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=report.xls'
+    return response
 
 class SiAdminSite(AdminSite):
     login_template = 'si/login.html'

@@ -1,13 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 
 class Course(models.Model):
+    TERM_CHOICES= (
+        ('FA','Fall'),
+        ('WI','Winter'))
     professor = models.CharField(max_length=100)
     department = models.CharField(max_length=2)
     code = models.IntegerField()
     section = models.CharField(max_length=2)
+    year = models.IntegerField()
+    term = models.CharField(max_length=2,choices=TERM_CHOICES)
     exam = models.DateField()
     midterm = models.DateField()
     user = models.ForeignKey(User)
@@ -26,18 +32,13 @@ class Student(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     course = models.ForeignKey(Course)
-    interest = models.IntegerField()
+    interest = models.IntegerField(choices=[(i+1,i+1) for i in range(5)])
     taken = models.BooleanField()
     future = models.CharField(max_length=1,choices=FUTURE_CHOICES)
     user = models.ForeignKey(User)
     def __unicode__(self):
         return self.first_name + ' ' + self.last_name + ' ('+self.course.__unicode__() + ')'
     
-'''
-class Session(models.Model):
-    date = models.DateField()
-    sutdent = models.ForeignKey(Student)
-'''
 class Session(models.Model):
     date = models.DateField()
     course = models.ForeignKey(Course)
