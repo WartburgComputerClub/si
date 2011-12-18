@@ -10,7 +10,10 @@ class SessionForm(forms.ModelForm):
         model = Session
     def clean_student(self):
         students = self.cleaned_data['student']
-        course = self.cleaned_data['course']
+        try:
+            course = self.cleaned_data['course']
+        except:
+            return self.cleaned_data['student']
         for s in students:
             if s.course != course:
                 raise forms.ValidationError("Students must be part of selected course!")
