@@ -7,7 +7,9 @@ from django.contrib.auth.models import User
 class Course(models.Model):
     TERM_CHOICES= (
         ('FA','Fall'),
-        ('WI','Winter'))
+        ('WI','Winter'),
+        ('MA','May'),
+        ('SU','Summer'))
     professor = models.CharField(max_length=100)
     department = models.CharField(max_length=2)
     code = models.IntegerField()
