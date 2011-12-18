@@ -1,8 +1,8 @@
 <?
 ob_start();
-include 'mathlab/Classes/PHPExcel.php';
+include 'Classes/PHPExcel.php';
 $objReader = PHPExcel_IOFactory::createReader('Excel5');   
-$excel = $objReader->load('mathlab/sheet.xls');
+$excel = $objReader->load('sheet.xls');
 $count = 0;
 foreach($_POST as $csv)
 {
