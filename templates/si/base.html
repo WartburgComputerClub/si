@@ -40,7 +40,7 @@
                     <a href="{{ root_path }}password_change/">
                 {% endif %}
                 {% trans 'Change password' %}</a> /
-                {% url 'si.views.logout' as logout_url %}
+                {% url 'admin:logout' as logout_url %}
                 {% if logout_url %}
                     <a href="{{ logout_url }}">
                 {% else %}
