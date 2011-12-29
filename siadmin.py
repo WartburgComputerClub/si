@@ -166,7 +166,7 @@ class SessionAdmin(ModelAdmin):
             return False
     has_delete_permission = has_change_permission
     
-site = SiAdminSite(name="si")
+site = SiAdminSite(name="SI")
 
 site.register(Session,SessionAdmin)
 site.register(Student,StudentAdmin)
