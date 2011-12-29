@@ -50,6 +50,8 @@ background: #FFC url({% admin_media_prefix %}img/admin/icon_success.gif) 5px .3e
 
 <div id="content-main">
 <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+  <center><h1>{{ course }}</h1></center>
+  <br />
   <div class="form-row">
     {% if not form.this_is_the_login_form.errors %}{{ form.first_name.errors }}{% endif %}
     <label for="id_first_name" class="required">{% trans 'First Name:' %}</label> {{ form.first_name }}

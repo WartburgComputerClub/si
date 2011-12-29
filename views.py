@@ -63,6 +63,7 @@ def signin(request,session):
         return render_to_response("si/signin.html",{
             'form': form,
             'title': ('Sign In ' + str(sess.date)),
+            'course': str(sess.course)
             },context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('../../admin')
