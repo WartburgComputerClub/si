@@ -1,4 +1,13 @@
 from django.contrib.admin import AdminSite,ModelAdmin
+
+from django.views.decorators.cache import never_cache
+from django.utils.text import capfirst
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext as _
+from django import http, template
+from django.shortcuts import render_to_response
+
+
 from si.forms import SessionForm
 from si.models import Student,Course,Session
 from django.contrib.auth.models import User,Group
@@ -56,6 +65,54 @@ class SiAdminSite(AdminSite):
     login_template = 'si/login.html'
     index_template = 'si/index.html'
     logout_template='si/logged_out.html'
+
+    def app_index(self, request, app_label, extra_context=None):
+        user = request.user
+        has_module_perms = user.has_module_perms(app_label)
+        app_dict = {}
+        for model, model_admin in self._registry.items():
+            if app_label == model._meta.app_label:
+                if has_module_perms:
+                    perms = model_admin.get_model_perms(request)
+
+                    # Check whether user has any perm for this module.
+                    # If so, add the module to the model_list.
+                    if True in perms.values():
+                        model_dict = {
+                            'name': capfirst(model._meta.verbose_name_plural),
+                            'admin_url': '%s/' % model.__name__.lower(),
+                            'perms': perms,
+                        }
+                        if app_dict:
+                            app_dict['models'].append(model_dict),
+                        else:
+                            # First time around, now that we know there's
+                            # something to display, add in the necessary meta
+                            # information.
+                            app_dict = {
+                                'name': app_label.title(),
+                                'app_url': '',
+                                'has_module_perms': has_module_perms,
+                                'models': [model_dict],
+                            }
+        if not app_dict:
+            raise http.Http404('The requested admin page does not exist.')
+        # Sort the models alphabetically within each app.
+        app_dict['models'].sort(key=lambda x: x['name'])
+        context = {
+            'title': _('%s administration') % 'SI',
+            'app_list': [app_dict],
+            'root_path': self.root_path,
+        }
+        context.update(extra_context or {})
+        context_instance = template.RequestContext(request, current_app=self.name)
+        return render_to_response(self.app_index_template or ('admin/%s/app_index.html' % app_label,
+            'admin/app_index.html'), context,
+            context_instance=context_instance
+        )
+
+
+
 
 class StudentAdmin(ModelAdmin):
     search_fields= ['first_name','last_name','course__department','course__code'
