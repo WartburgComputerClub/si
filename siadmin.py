@@ -105,6 +105,11 @@ class SiAdminSite(AdminSite):
         # Sort the models alphabetically within each app.
         for app in app_list:
             app['models'].sort(key=lambda x: x['name'])
+            
+        # change Si to SI
+        for app in app_list:
+            if app['name'] == 'Si':
+                app['name'] = 'SI'
 
         context = {
             'title': _('Site administration'),
@@ -121,6 +126,7 @@ class SiAdminSite(AdminSite):
     def app_index(self, request, app_label, extra_context=None):
         user = request.user
         has_module_perms = user.has_module_perms(app_label)
+
         app_dict = {}
         for model, model_admin in self._registry.items():
             if app_label == model._meta.app_label:
@@ -141,8 +147,11 @@ class SiAdminSite(AdminSite):
                             # First time around, now that we know there's
                             # something to display, add in the necessary meta
                             # information.
+                            name = app_label.title()
+                            if name == 'Si':
+                                name = 'SI'
                             app_dict = {
-                                'name': app_label.title(),
+                                'name': name,
                                 'app_url': '',
                                 'has_module_perms': has_module_perms,
                                 'models': [model_dict],
