@@ -160,8 +160,11 @@ class SiAdminSite(AdminSite):
             raise http.Http404('The requested admin page does not exist.')
         # Sort the models alphabetically within each app.
         app_dict['models'].sort(key=lambda x: x['name'])
+        title = capfirst(app_label)
+        if name == 'SI':
+            title = name
         context = {
-            'title': _('%s administration') % 'SI',
+            'title': _('%s administration') % title,
             'app_list': [app_dict],
             'root_path': self.root_path,
         }
