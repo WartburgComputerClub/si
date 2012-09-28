@@ -68,18 +68,3 @@ def signin(request,session):
     else:
         return HttpResponseRedirect('../../admin')
 
-def update(request):
-    commands = (['git','stash'],
-                ['git','pull','git@github.com:dattashantih/si.git'],
-                ['git','stash','pop']
-                )
-    
-    html = ''
-    for command in commands:
-        p = subprocess.Popen(command)
-        out,err = p.communicate()
-        html += out + "<hr />"
-
-    return HttpResponse(html)
-        #return HttpResponse(call(["git","pull","git@github.com:dattashantih/si.git"]))
-
