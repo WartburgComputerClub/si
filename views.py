@@ -1,5 +1,5 @@
-
 # Create your views here.
+import subprocess
 from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response,get_object_or_404
@@ -67,3 +67,19 @@ def signin(request,session):
             },context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('../../admin')
+
+def update(request):
+    commands = (['git','stash'],
+                ['git','pull','git@github.com:dattashantih/si.git'],
+                ['git','stash','pop']
+                )
+    
+    html = ''
+    for command in commands:
+        p = subprocess.Popen(command)
+        out,err = p.communicate()
+        html += out + "<hr />"
+
+    return HttpResponse(html)
+        #return HttpResponse(call(["git","pull","git@github.com:dattashantih/si.git"]))
+

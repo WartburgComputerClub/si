@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = patterns('si.views',
     url(r'^$','index',name='index'),                       
     (r'^signin/(?P<session>\d+)/$','signin'),
+    (r'^update/$','update'),
     (r'^admin/',include(site.urls)),
     (r'^register/$','register'),
     (r'^leave/$','leave'),                       
